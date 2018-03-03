@@ -140,7 +140,7 @@ public class Bird extends Actor implements Disposable {
     public void up() {
         // 给予小鸟向上的重力，使其达到向上跳跃一下
         body.setLinearVelocity(0, 0);
-        body.applyForceToCenter(0, 1.3f, true);
+        body.applyForceToCenter(0, 1.35f, true);
 
         // 设置帧动画频率更快，让翅膀动得更加急促，显得很用力的在飞
         animation.setFrameDuration(0.055f);
@@ -151,7 +151,7 @@ public class Bird extends Actor implements Disposable {
         }
         // 点一下就将头向上边仰一下, 然后头向下旋转
         RotateToAction rotateByAction = Actions.rotateTo(20f, 0.2f);
-        DelayAction d = Actions.delay(0.3f);
+        DelayAction d = Actions.delay(0.23f);
         RotateToAction rotateByAction4 = Actions.rotateTo(-90f, 0.4f);
         rotateByAction4.setInterpolation(Interpolation.pow2In);
         sequence1 = Actions.sequence(rotateByAction, d, rotateByAction4);

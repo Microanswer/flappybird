@@ -103,7 +103,7 @@ public class GameScreen extends BaseScreen implements InputProcessor, ContactLis
         Gdx.input.setInputProcessor(this);
         preferences = Gdx.app.getPreferences("preferences");
 
-        world = new World(new Vector2(0, -3.5f), true);
+        world = new World(new Vector2(0, -3.8f), true);
         world.setContactListener(this);
         viewport = new ScalingViewport(Scaling.fill, WIDTH, HEIGHT, camera);
         pipeStage = new Stage(viewport, batch);
