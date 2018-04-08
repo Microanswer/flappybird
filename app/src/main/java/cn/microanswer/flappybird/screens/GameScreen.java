@@ -1,5 +1,7 @@
 package cn.microanswer.flappybird.screens;
 
+import android.content.Intent;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
@@ -27,6 +29,7 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.MainActivity;
 import cn.microanswer.flappybird.Util;
 import cn.microanswer.flappybird.sprites.Bird;
 import cn.microanswer.flappybird.sprites.Btn;
@@ -356,6 +359,8 @@ public class GameScreen extends BaseScreen implements InputProcessor, ContactLis
                 });
             }
         } else if (btn == btnScores) {
+            // 跳转到成绩界面
+            Util.jump2ScoreActivity(game.getMainActivity());
         }
     }
 

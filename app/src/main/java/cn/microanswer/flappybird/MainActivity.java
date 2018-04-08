@@ -13,7 +13,7 @@ public class MainActivity extends AndroidApplication {
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = false;
         config.useCompass = false;
-        initialize(new FlappyBirdGame(), config);
+        initialize(new FlappyBirdGame().setMainActivity(this), config);
     }
 
     @Override

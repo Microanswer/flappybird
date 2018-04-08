@@ -1,5 +1,7 @@
 package cn.microanswer.flappybird;
 
+import android.content.Context;
+
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -20,7 +22,17 @@ import cn.microanswer.flappybird.sprites.RestartFlashActor;
  */
 
 public class FlappyBirdGame extends Game {
-    public static final float WIDTH$HEIGHT = .5625f;
+    private MainActivity mainActivity;
+    public FlappyBirdGame setMainActivity(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+        return this;
+    }
+
+    public MainActivity getMainActivity() {
+        return mainActivity;
+    }
+
+    private static final float WIDTH$HEIGHT = .5625f;
     public static final float WIDTH = 1f;
     public static final float HEIGHT = WIDTH / WIDTH$HEIGHT;
     private SpriteBatch batch;
@@ -39,7 +51,7 @@ public class FlappyBirdGame extends Game {
     }
 
     // 资源加载完成时调用
-    public void loadOk() {
+    private void loadOk() {
         MAssetsManager.instance().d0WhenLoaded();
         screenChangeActor = new RestartFlashActor().init(null);
         RunnableAction d = new RunnableAction();

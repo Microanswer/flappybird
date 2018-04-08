@@ -1,5 +1,7 @@
 package cn.microanswer.flappybird.screens;
 
+import android.widget.Toast;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -55,11 +57,13 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener, Input
         btnPlay.setPosition((WIDTH - (238f / 288f * FlappyBirdGame.WIDTH)) / 2f, (102f / 512f * HEIGHT));
 
         btnScore = new Btn().init(this);
+        btnScore.setOnClickListener(this);
         btnScore.setRegion(MAssetsManager.instance().btnScore);
         float x = btnPlay.getX() + (238f / 288f * FlappyBirdGame.WIDTH) - btnScore.getWidth();
         btnScore.setPosition(x, btnPlay.getY());
 
         btnRate = new Btn().initSmall(this);
+        btnRate.setOnClickListener(this);
         btnRate.setRegion(MAssetsManager.instance().btnRate);
         btnRate.setPosition((WIDTH - btnRate.getWidth()) / 2f, btnPlay.getY() + btnPlay.getHeight() + btnRate.getHeight() / 2f);
 
@@ -146,6 +150,16 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener, Input
         if (btnPlay == btn) {
             // 开始游戏
             game.setScreen(new GameScreen(camera, batch).setGame(game));
+        } else if (btnScore == btn) {
+            // 跳转成绩排行
+            Util.jump2ScoreActivity(game.getMainActivity());
+        } else if (btnRate == btn) {
+            game.getMainActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(game.getMainActivity(),"开发中..", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 
