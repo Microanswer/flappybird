@@ -508,3 +508,24 @@ microanswer
   orig: 166, 40
   offset: 0, 0
   index: -1
+dialogbg
+  rotate: false
+  xy: 708, 314
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+loading
+  rotate: false
+  xy: 772, 314
+  size: 36, 36
+  orig: 36, 36
+  offset: 0, 0
+  index: -1
+scoreuptip
+  rotate: false
+  xy: 708, 358
+  size: 206, 38
+  orig: 206, 38
+  offset: 0, 0
+  index: -1

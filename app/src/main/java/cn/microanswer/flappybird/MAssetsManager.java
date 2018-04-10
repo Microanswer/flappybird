@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
@@ -30,6 +31,7 @@ public class MAssetsManager implements Disposable, AssetErrorListener {
     public TextureAtlas.AtlasRegion whilte, black, score_panel;
     public TextureAtlas.AtlasRegion btnPlay, btnScore, new_, btnRate;
     public TextureAtlas.AtlasRegion medals[] = new TextureAtlas.AtlasRegion[4];
+    public TextureAtlas.AtlasRegion dialogBg, loading,scoreuptip;
 
     public Sound funSound;
     public Sound birdSound;
@@ -130,6 +132,15 @@ public class MAssetsManager implements Disposable, AssetErrorListener {
 
         // rate
         btnRate = textureAtlas.findRegion("button_rate");
+
+        // 弹出框背景
+        dialogBg = textureAtlas.findRegion("dialogbg");
+
+        // 加载图
+        loading = textureAtlas.findRegion("loading");
+
+        // 成绩上传提示
+        scoreuptip = textureAtlas.findRegion("scoreuptip");
 
         // 按钮声音， 物件出现声音
         funSound = assetManager.get("sounds/sfx_swooshing.ogg");

@@ -12,11 +12,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
+import java.util.Date;
 import java.util.Random;
 
 import cn.microanswer.flappybird.FlappyBirdGame;
 import cn.microanswer.flappybird.MAssetsManager;
 import cn.microanswer.flappybird.Util;
+import cn.microanswer.flappybird.dialogs.AlertDialog;
+import cn.microanswer.flappybird.dialogs.LoadingDialog;
 import cn.microanswer.flappybird.sprites.Btn;
 
 import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
@@ -26,7 +29,7 @@ import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
  * Created by Micro on 2018-2-21.
  */
 
-public class MenuScreen extends BaseScreen implements Btn.OnClickListener, InputProcessor {
+public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
 
     private Animation<TextureAtlas.AtlasRegion> birdAnimation;
     private float birdW, birdH, birdX, birdY;
@@ -41,7 +44,7 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener, Input
         super(camera, batch);
 
         Gdx.input.setInputProcessor(this);
-        stage = new Stage(new ScalingViewport(Scaling.fill, camera.viewportWidth, camera.viewportHeight, camera), batch);
+        stage = new Stage(getViewport(), batch);
 
         if (Util.isDay()) {
             bg = (MAssetsManager.instance().bg_day);
@@ -152,14 +155,12 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener, Input
             game.setScreen(new GameScreen(camera, batch).setGame(game));
         } else if (btnScore == btn) {
             // 跳转成绩排行
-            Util.jump2ScoreActivity(game.getMainActivity());
+            Util.jump2ScoreActivity(game.getMainActivity(),"http://microanswer.cn/flappybird/scorebord.html?t=" + new Date().getDay());
         } else if (btnRate == btn) {
-            game.getMainActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(game.getMainActivity(),"开发中..", Toast.LENGTH_SHORT).show();
-                }
-            });
+
+            AlertDialog alertDialog = new AlertDialog(this, "");
+            alertDialog.show();
+
         }
     }
 

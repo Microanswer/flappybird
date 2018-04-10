@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 
+import cn.microanswer.flappybird.screens.BaseScreen;
 import cn.microanswer.flappybird.screens.LogoScreen;
 import cn.microanswer.flappybird.screens.MenuScreen;
 import cn.microanswer.flappybird.sprites.RestartFlashActor;
@@ -23,6 +24,7 @@ import cn.microanswer.flappybird.sprites.RestartFlashActor;
 
 public class FlappyBirdGame extends Game {
     private MainActivity mainActivity;
+
     public FlappyBirdGame setMainActivity(MainActivity mainActivity) {
         this.mainActivity = mainActivity;
         return this;
@@ -91,6 +93,12 @@ public class FlappyBirdGame extends Game {
             batch.begin();
             screenChangeActor.draw(batch, 1f);
             batch.end();
+        }
+
+        // 绘制弹出框舞台
+        if (screen != null && screen instanceof BaseScreen) {
+            BaseScreen baseScreen = (BaseScreen) screen;
+            baseScreen.renderDialogStage(Gdx.graphics.getDeltaTime());
         }
     }
 

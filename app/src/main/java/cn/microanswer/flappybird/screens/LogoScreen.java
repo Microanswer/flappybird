@@ -39,7 +39,6 @@ public class LogoScreen extends BaseScreen {
     @Override
     public void show() {
         camera = new OrthographicCamera(WIDTH, HEIGHT);
-        Viewport viewport = new FillViewport(WIDTH, HEIGHT, camera);
         stage = new Stage(viewport, batch);
         logoActor = new LogoActor().init(this);
         stage.addActor(logoActor);

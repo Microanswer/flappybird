@@ -1,7 +1,5 @@
 package cn.microanswer.flappybird.screens;
 
-import android.content.Intent;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
@@ -23,13 +21,16 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
+import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import java.util.Date;
+
 import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.MainActivity;
 import cn.microanswer.flappybird.Util;
 import cn.microanswer.flappybird.sprites.Bird;
 import cn.microanswer.flappybird.sprites.Btn;
@@ -49,13 +50,12 @@ import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
  * Created by Micro on 2018-2-19.
  */
 
-public class GameScreen extends BaseScreen implements InputProcessor, ContactListener, Btn.OnClickListener {
-    public static final float RUNSPEED = -.4f;
+public class GameScreen extends BaseScreen implements ContactListener, Btn.OnClickListener {
+    public static final float RUNSPEED = -.41f;
     public static final int STAT_NONE = 0; // 游戏完全还没有开始
     public static final int STAT_PLAYING = 1; // 游戏进行中
     public static final int STAT_OVER = 2; // 游戏结束。
 
-    private Viewport viewport;
     private World world;
     private Preferences preferences;
 
@@ -108,7 +108,6 @@ public class GameScreen extends BaseScreen implements InputProcessor, ContactLis
 
         world = new World(new Vector2(0, -3.8f), true);
         world.setContactListener(this);
-        viewport = new ScalingViewport(Scaling.fill, WIDTH, HEIGHT, camera);
         pipeStage = new Stage(viewport, batch);
         pipeStage.addActor(new Pipe(0).init(this));
         pipeStage.addActor(new Pipe(1).init(this));
@@ -360,7 +359,7 @@ public class GameScreen extends BaseScreen implements InputProcessor, ContactLis
             }
         } else if (btn == btnScores) {
             // 跳转到成绩界面
-            Util.jump2ScoreActivity(game.getMainActivity());
+            Util.jump2ScoreActivity(game.getMainActivity(), "http://microanswer.cn/flappybird/scorebord.html?t=" + new Date().getDay());
         }
     }
 
@@ -402,7 +401,19 @@ public class GameScreen extends BaseScreen implements InputProcessor, ContactLis
                 scorePanelActor.show(scoreActor.getScore(), best, isnew);
                 // 显示重新开始按钮
                 MoveToAction moveToAction = Actions.moveTo(btnPlay.getX(), (102f / 512f * HEIGHT), 0);
-                btnPlay.addAction(Actions.delay(1.75f, moveToAction));
+                final boolean finalIsnew = isnew;
+                final int finalBest = best;
+                RunnableAction runnableAction = new RunnableAction();
+                runnableAction.setRunnable(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (finalIsnew) {
+                            game.getMainActivity().submitScore(finalBest);
+                        }
+                    }
+                });
+                ParallelAction parallel = Actions.parallel(moveToAction, runnableAction);
+                btnPlay.addAction(Actions.delay(1.75f, parallel));
                 btnScores.addAction(Actions.sequence(Actions.delay(1.75f), Actions.moveTo(btnScores.getX(), moveToAction.getY())));
             }
         }

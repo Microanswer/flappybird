@@ -23,10 +23,13 @@ public class Util {
 
     /**
      * 跳转到成绩排行界面
+     *
      * @param context
      */
-    public static void jump2ScoreActivity(MainActivity context) {
-        context.startActivity(new Intent(context, ScoreActivity.class));
+    public static void jump2ScoreActivity(final MainActivity context, String url) {
+        Intent intent = new Intent(context, ScoreActivity.class);
+        intent.putExtra("url", url);
+        context.startActivity(intent);
         context.overridePendingTransition(R.anim.score_activity_in, R.anim.score_activity_out);
     }
 }

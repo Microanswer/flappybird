@@ -1,24 +1,29 @@
 package cn.microanswer.flappybird;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.webkit.WebChromeClient;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
+import java.util.Date;
 
 /**
  * 显示成绩排行的Activity
  */
 public class ScoreActivity extends Activity {
+    private WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_score);
 
-        WebView webView = findViewById(R.id.webview);
+        webView = findViewById(R.id.webview);
 
         WebSettings settings = webView.getSettings();
         settings.setAllowContentAccess(true);
@@ -31,11 +36,16 @@ public class ScoreActivity extends Activity {
         settings.setDomStorageEnabled(true);
         settings.setJavaScriptEnabled(true);
         settings.setGeolocationEnabled(true);
+        String userAgentString = settings.getUserAgentString();
+        settings.setUserAgentString(userAgentString + "; MicroanswerFlappyBirdGameWeb");
 
         webView.setWebChromeClient(new MyWebChrome());
         webView.setWebViewClient(new MyWebView());
 
-        webView.loadUrl("http://microanswer.cn/flappybird/scorebord.html?time=" + Math.random());
+        Intent intent = getIntent();
+
+        String url = intent.getStringExtra("url");
+        webView.loadUrl(url);
     }
 
     @Override
@@ -49,6 +59,23 @@ public class ScoreActivity extends Activity {
     }
 
     private class MyWebView extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                webView.loadUrl(request.getUrl().toString());
+            } else {
+                webView.loadUrl(request.toString());
+            }
+            return true;
+        }
+    }
 
+    @Override
+    public void onBackPressed() {
+        if (!webView.canGoBack()) {
+            super.onBackPressed();
+        } else {
+            webView.goBack();
+        }
     }
 }
