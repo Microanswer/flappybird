@@ -41,6 +41,11 @@ public abstract class BaseScreen extends InputAdapter implements Screen {
         return this;
     }
 
+    @Override
+    public void resize(int width, int height) {
+        viewport.apply(true);
+    }
+
     public FlappyBirdGame getGame() {
         return game;
     }

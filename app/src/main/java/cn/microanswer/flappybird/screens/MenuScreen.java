@@ -1,5 +1,6 @@
 package cn.microanswer.flappybird.screens;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import com.badlogic.gdx.Gdx;
@@ -42,7 +43,10 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
 
     public MenuScreen(OrthographicCamera camera, Batch batch) {
         super(camera, batch);
+    }
 
+    @Override
+    public void show() {
         Gdx.input.setInputProcessor(this);
         stage = new Stage(getViewport(), batch);
 
@@ -94,11 +98,6 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
         stage.addActor(btnPlay);
         stage.addActor(btnScore);
         stage.addActor(btnRate);
-    }
-
-    @Override
-    public void show() {
-
 
     }
 
@@ -123,11 +122,6 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
     }
 
     @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
     public void pause() {
 
     }
@@ -141,6 +135,7 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
     public void hide() {
 
     }
+
 
     @Override
     public void dispose() {

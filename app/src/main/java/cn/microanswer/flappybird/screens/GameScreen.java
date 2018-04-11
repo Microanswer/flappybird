@@ -150,9 +150,9 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         stage.addActor(btnScores);
         stage.addActor(dieFlashActor);
         stage.addActor(restartFlashActor);
-//        renderer = new Box2DDebugRenderer();
-//        bitmapFont = new BitmapFont(Gdx.files.internal("arial-15.fnt"));
-//        bitmapFont.setColor(Color.BLACK);
+        // renderer = new Box2DDebugRenderer();
+        // bitmapFont = new BitmapFont(Gdx.files.internal("arial-15.fnt"));
+        // bitmapFont.setColor(Color.BLACK);
 
         buildWorldWall(); // 给游戏四周添加限制
     }
@@ -203,10 +203,6 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         stage.draw();
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
 
     @Override
     public void pause() {
