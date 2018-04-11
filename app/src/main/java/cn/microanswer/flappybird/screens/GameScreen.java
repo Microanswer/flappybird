@@ -355,7 +355,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
             }
         } else if (btn == btnScores) {
             // 跳转到成绩界面
-            Util.jump2ScoreActivity(game.getMainActivity(), "http://microanswer.cn/flappybird/scorebord.html?t=" + new Date().getDay());
+            Util.jump2ScoreActivity(game.getMainActivity(), "http://microanswer.cn/flappybird/scorebord.html");
         }
     }
 

@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -99,6 +100,13 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
         stage.addActor(btnScore);
         stage.addActor(btnRate);
 
+        // 效验用户信息
+        getGame().getMainActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                getGame().getMainActivity().checkUserInfo();
+            }
+        });
     }
 
     @Override
@@ -150,11 +158,11 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
             game.setScreen(new GameScreen(camera, batch).setGame(game));
         } else if (btnScore == btn) {
             // 跳转成绩排行
-            Util.jump2ScoreActivity(game.getMainActivity(),"http://microanswer.cn/flappybird/scorebord.html?t=" + new Date().getDay());
+            Util.jump2ScoreActivity(game.getMainActivity(),"http://microanswer.cn/flappybird/scorebord.html");
         } else if (btnRate == btn) {
 
-            AlertDialog alertDialog = new AlertDialog(this, "");
-            alertDialog.show();
+            // AlertDialog alertDialog = new AlertDialog(this, "");
+            // alertDialog.show();
 
         }
     }

@@ -21,7 +21,6 @@ public class AlertDialog extends Dialog {
     @Override
     public void onCreate() {
         setDialogWidth(250f/288f);
-        setDialogHeight(100f/512f);
 
         mx = (getWidth() - (206f/288f))/2f;
         my = (getHeight() - (70f/512f))/2f;

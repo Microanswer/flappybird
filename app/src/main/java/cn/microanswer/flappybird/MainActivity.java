@@ -10,6 +10,7 @@ import android.content.Loader;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
@@ -80,34 +81,81 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
     }
 
     /**
+     * 检查用户是否登录，如果没有，将给出相关提示。
+     */
+    public void checkUserInfo() {
+
+        if (App.user == null) { // 没有用户信息， 表名用户没有登录
+            // 弹出提示，让用户登录
+
+            // 如果用户配置了不再弹出提示，不弹出
+            if (App.config.isNeverHintLogin()) {
+                return;
+            }
+
+            View inflate = getLayoutInflater().inflate(R.layout.dialog_logintip, null);
+            AlertDialog alertDialog = new AlertDialog.Builder(this).setView(inflate).setTitle(getString(R.string.tipp)).create();
+            alertDialog.setCancelable(false);
+            final CheckBox checkbox = inflate.findViewById(R.id.checkbox);
+            checkbox.setChecked(App.config.isNeverHintLogin());
+            alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, getString(R.string.loginnow), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    App.config.setNeverHintLogin(checkbox.isChecked());
+                    Util.jump2ScoreActivity(MainActivity.this, "http://microanswer.cn/user/page/login.html");
+                }
+            });
+            alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    App.config.setNeverHintLogin(checkbox.isChecked());
+                }
+            });
+            alertDialog.show();
+        }
+    }
+
+    /**
      * 提交成绩
      *
      * @param score
      */
     public void submitScore(final int score) {
 
-        // 获取 token
-        final String token = App.user.getToken();
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                // 获取 token
+                String token = null;
+
+                if (App.user!=null ) {
+                    token = App.user.getToken();
+                }
 
                 // 没有 token就必须要求先登录
                 if (TextUtils.isEmpty(token)) {
-                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this).setTitle("提示").create();
-                    dialog.setMessage("上传成绩，参与全球排行榜需要先登录。现在进行登录吗？");
-                    dialog.setButton(AlertDialog.BUTTON_POSITIVE, "登录", new DialogInterface.OnClickListener() {
+                    View f = getLayoutInflater().inflate(R.layout.dialog_scoreuploadtip, null);
+                    AlertDialog dialog = new AlertDialog.Builder(MainActivity.this).setTitle("提示").setView(f).create();
+                    final CheckBox checkbox = f.findViewById(R.id.checkbox);
+                    checkbox.setChecked(App.config.isNeverHintScoreUpload());
+                    dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.login), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             Util.jump2ScoreActivity(MainActivity.this, "http://microanswer.cn/user/page/login.html");
+                            App.config.setNeverHintScoreUpload(checkbox.isChecked());
                         }
                     });
-                    dialog.setButton(AlertDialog.BUTTON_NEGATIVE, "关闭", (DialogInterface.OnClickListener) null);
+                    dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            App.config.setNeverHintScoreUpload(checkbox.isChecked());
+                        }
+                    });
                     dialog.show();
                     return;
                 }
 
+                // 有 TOKEN
 
                 Bundle bundle = new Bundle();
                 bundle.putInt("score", score);
