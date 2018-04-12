@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -19,6 +18,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -65,7 +65,12 @@ public class HttpClientUtil {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("method", method);
         jsonObject.put("data", data);
-        return doPost(url, jsonObject.toString());
+
+
+        TreeMap<String, String> headers = new TreeMap<>();
+        headers.put("Content-Type", "application/json;charset=UTF-8");
+
+        return doPost(url, jsonObject.toString(), headers);
     }
 
     public static String doPost(String url, String params) throws Exception {
@@ -109,6 +114,7 @@ public class HttpClientUtil {
     }
 
     public static String doPost(String url, String params, Map<String, String> headParams) throws Exception {
+        System.out.println("请求网络：" + params);
         byte[] content = {};
         if (params != null) {
             content = params.getBytes(DEFAULT_CHARSET);

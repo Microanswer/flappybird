@@ -6,4 +6,5 @@
   <string name="tipp">提示</string>
   <string name="scoreuploadtip">上传成绩，参与全国排行榜需要先登录。现在进行登录吗？</string>
   <string name="login">登录</string>
+  <string name="loading">加载中...</string>
 </resources>

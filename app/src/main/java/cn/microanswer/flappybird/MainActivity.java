@@ -1,12 +1,8 @@
 package cn.microanswer.flappybird;
 
 import android.app.AlertDialog;
-import android.app.LoaderManager;
-import android.content.AsyncTaskLoader;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.Loader;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -22,9 +18,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.egl.EGLContext;
 import javax.microedition.khronos.egl.EGLDisplay;
 
-public class MainActivity extends AndroidApplication implements LoaderManager.LoaderCallbacks<Object> {
-    private final int LOADER_SUBMIT_SCORE = 1;
-    private LoaderManager loaderManager;
+public class MainActivity extends AndroidApplication {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +35,10 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
             return;
         }
 
-
-        // 创建异步处理器
-        loaderManager = getLoaderManager();
-
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         config.useAccelerometer = false;
         config.useCompass = false;
+        config.useGL30 = true;
         FlappyBirdGame flappyBirdGame = new FlappyBirdGame().setMainActivity(this);
 
         View view = initializeForView(flappyBirdGame, config);
@@ -85,7 +76,7 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
      */
     public void checkUserInfo() {
 
-        if (App.user == null) { // 没有用户信息， 表名用户没有登录
+        if (App.user == null || TextUtils.isEmpty(App.user.getToken())) { // 没有用户信息， 表名用户没有登录
             // 弹出提示，让用户登录
 
             // 如果用户配置了不再弹出提示，不弹出
@@ -102,7 +93,9 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     App.config.setNeverHintLogin(checkbox.isChecked());
-                    Util.jump2ScoreActivity(MainActivity.this, "http://microanswer.cn/user/page/login.html");
+
+                    jump2Login();
+
                 }
             });
             alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -115,12 +108,37 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
         }
     }
 
+    private void jump2Login() {
+        Intent intent = new Intent(MainActivity.this, ScoreActivity.class);
+        intent.putExtra("url", "http://microanswer.cn/user/page/login.html");
+        startActivityForResult(intent, 222);
+        overridePendingTransition(R.anim.score_activity_in, R.anim.score_activity_out);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (222 == requestCode && tScore > 0 && !TextUtils.isEmpty(playId)) {
+            // 登录成功了
+            // 继续执行成绩上传。
+            submitScore(tScore, playId);
+        }
+
+    }
+
+    private int tScore = 0;
+    private String playId;
+    private boolean relogined; // 登录信息失效时， 标记是否重试登录， 如果重试了，不再重试
+
     /**
      * 提交成绩
      *
      * @param score
      */
-    public void submitScore(final int score) {
+    public void submitScore(final int score, final String playId) {
+        this.playId = playId;
+        tScore = score;
 
         runOnUiThread(new Runnable() {
             @Override
@@ -128,7 +146,7 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
                 // 获取 token
                 String token = null;
 
-                if (App.user!=null ) {
+                if (App.user != null) {
                     token = App.user.getToken();
                 }
 
@@ -141,8 +159,8 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
                     dialog.setButton(AlertDialog.BUTTON_POSITIVE, getString(R.string.login), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Util.jump2ScoreActivity(MainActivity.this, "http://microanswer.cn/user/page/login.html");
                             App.config.setNeverHintScoreUpload(checkbox.isChecked());
+                            jump2Login();
                         }
                     });
                     dialog.setButton(AlertDialog.BUTTON_NEGATIVE, getString(R.string.cancel), new DialogInterface.OnClickListener() {
@@ -156,70 +174,78 @@ public class MainActivity extends AndroidApplication implements LoaderManager.Lo
                 }
 
                 // 有 TOKEN
+                final String finalToken = token;
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            JSONObject data = new JSONObject();
+                            data.put("score", score);
+                            data.put("token", finalToken);
+                            data.put("gv", Util.getVersion(MainActivity.this));
+                            data.put("deviceinfo", Util.getPhoneInfo());
 
-                Bundle bundle = new Bundle();
-                bundle.putInt("score", score);
+                            String s = HttpClientUtil.post("http://microanswer.cn/flappybird/index.php", "uploadScore", data);
+                            System.out.println("成绩上传结果：" + s);
+                            JSONObject jr = new JSONObject(s);
+                            int code = jr.getInt("code");
+                            if (code == 200) {
+                                // return "success";
+                            } else {
+                                if (code == 502) {
+                                    // return "relogin"; // 登录信息失效。需要重新登录
+                                    if (!relogined) {
+                                        relogin();
+                                        relogined = true;
+                                    }
+                                } else if (code == 501) {
+                                    // return "noaccount"; // 无效的登录token
+                                    // 无效的登录token
+                                    // 清空现有的用户信息
+                                    App.user.setToken(null);
+                                    App.user.setPassword(null);
+                                    App.user.setAccount(null);
+                                    App.user.setInfo(null);
+                                    Util.saveUserInfo2File(App.user);
+                                }
+                            }
 
-                if (loaderManager.getLoader(LOADER_SUBMIT_SCORE) == null) {
-                    loaderManager.initLoader(LOADER_SUBMIT_SCORE, bundle, MainActivity.this);
-                } else {
-                    loaderManager.restartLoader(LOADER_SUBMIT_SCORE, bundle, MainActivity.this);
-                }
+                        } catch (Throwable e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
 
             }
         });
     }
 
+    private void relogin() {
+        try {
+            JSONObject data = new JSONObject();
+            data.put("name", App.user.getAccount());
+            data.put("password", App.user.getPassword());
+            data.put("loginType", "2");
+            data.put("loginTypeName", "通过Android设备上的flappyBird游戏自动登录");
+
+            String s = HttpClientUtil.post("http://microanswer.cn/user/index.php", "login", data);
+            System.out.println("重新登录结果：" + s);
+            JSONObject jr = new JSONObject(s);
+            int code = jr.getInt("code");
+            if (code == 200) {
+                App.user.setToken(jr.getString("data"));
+                Util.saveUserInfo2File(App.user);
+                // 再次尝试上传成绩
+                submitScore(tScore, playId);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onBackPressed() {
         // 屏蔽返回按钮
-    }
-
-    @Override
-    public Loader<Object> onCreateLoader(int id, Bundle args) {
-        if (id == LOADER_SUBMIT_SCORE) {
-            return new ScoreSubmitLoader(this, args);
-        }
-        return null;
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Object> loader, Object data) {
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Object> loader) {
-        if (loader instanceof ScoreSubmitLoader) {
-            ScoreSubmitLoader loader1 = (ScoreSubmitLoader) loader;
-            loader1.reset();
-        }
-
-    }
-
-    private class ScoreSubmitLoader extends AsyncTaskLoader<Object> {
-        private Bundle args;
-
-        public ScoreSubmitLoader(Context context, Bundle args) {
-            super(context);
-            this.args = args;
-        }
-
-        @Override
-        public Object loadInBackground() {
-            int score = args.getInt("score");
-            String token = args.getString("token");
-
-            try {
-                JSONObject data = new JSONObject();
-                data.put("score", score);
-                data.put("token", token);
-                String s = HttpClientUtil.post("http://microanswer.cn/flappybird/index.php",
-                        "uploadScore", data);
-                return new JSONObject(s);
-            } catch (Throwable e) {
-                return e;
-            }
-        }
     }
 }

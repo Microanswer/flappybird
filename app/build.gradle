@@ -24,9 +24,9 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.badlogicgames.gdx:gdx:1.9.8"
-    compile "com.badlogicgames.gdx:gdx-box2d:1.9.8"
-    compile "com.badlogicgames.gdx:gdx-backend-android:1.9.8"
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.badlogicgames.gdx:gdx:1.9.8'
+    compile 'com.badlogicgames.gdx:gdx-box2d:1.9.8'
+    compile 'com.badlogicgames.gdx:gdx-backend-android:1.9.8'
     // compile group: 'com.badlogicgames.gdx', name: 'gdx-freetype', version: '1.9.8'
 }

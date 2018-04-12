@@ -23,6 +23,7 @@ public class CONFIG implements Serializable {
     private SharedPreferences s;
     private boolean isNeverHintLogin = false; // 是否不再提示登录
     private boolean isNeverHintScoreUpload = false; // 是否不再提示成绩上传
+    private String scoreId;
 
     public boolean isNeverHintLogin() {
         return isNeverHintLogin;
@@ -42,9 +43,19 @@ public class CONFIG implements Serializable {
         s.edit().putBoolean("isNeverHintScoreUpload", isNeverHintScoreUpload).commit();
     }
 
+    public String getScoreId() {
+        return scoreId;
+    }
+
+    public void setScoreId(String scoreId) {
+        this.scoreId = scoreId;
+        s.edit().putString("scoreId", scoreId).commit();
+    }
+
     private void __init(SharedPreferences s) {
         this.s = s;
         isNeverHintLogin = s.getBoolean("isNeverHintLogin", false);
         isNeverHintScoreUpload = s.getBoolean("isNeverHintScoreUpload", false);
+        scoreId = s.getString("scoreId", null);
     }
 }

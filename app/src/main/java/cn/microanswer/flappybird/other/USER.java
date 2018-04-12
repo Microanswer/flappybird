@@ -18,7 +18,7 @@ public class USER implements Serializable {
 
     private String token;
 
-    private JSONObject info;
+    private String info;
 
     public static USER getUSer() {
         if (null == user) {
@@ -67,7 +67,7 @@ public class USER implements Serializable {
         this.token = token;
     }
 
-    public void setInfo(JSONObject info) {
+    public void setInfo(String info) {
         this.info = info;
     }
 
@@ -83,7 +83,7 @@ public class USER implements Serializable {
         return token;
     }
 
-    public JSONObject getInfo() {
+    public String getInfo() {
         return info;
     }
 }

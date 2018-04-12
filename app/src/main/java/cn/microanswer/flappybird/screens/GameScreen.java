@@ -70,6 +70,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     private ScorePanelActor scorePanelActor;
     private Btn btnPlay, btnScores;
     private TextureAtlas.AtlasRegion bg;
+    private String playId; // 每开始一局游戏，生成一个新的playId
 
     //    private BitmapFont bitmapFont;
 
@@ -264,6 +265,8 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
                 gameReadYActor.addAction(alphaAction);
 
                 gameStatus = STAT_PLAYING;
+
+                playId = Util.getRandomString(); // 生成一个随机ID
             } else if (getGameStatus() == STAT_PLAYING) {
                 // 游戏正在进行
                 bird.up();
@@ -404,7 +407,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
                     @Override
                     public void run() {
                         if (finalIsnew) {
-                            game.getMainActivity().submitScore(finalBest);
+                            game.getMainActivity().submitScore(finalBest, playId);
                         }
                     }
                 });
