@@ -9,12 +9,16 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.webkit.JavascriptInterface;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.tencent.smtt.export.external.interfaces.ConsoleMessage;
+import com.tencent.smtt.export.external.interfaces.WebResourceError;
+import com.tencent.smtt.export.external.interfaces.WebResourceRequest;
 import com.tencent.smtt.sdk.WebSettings;
 import com.tencent.smtt.sdk.WebView;
 
@@ -75,6 +79,15 @@ public class ScoreActivity extends Activity {
     }
 
     private class MyWebChrome extends com.tencent.smtt.sdk.WebChromeClient {
+        @Override
+        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
+            String str = consoleMessage.message();
+            if (!TextUtils.isEmpty(str) && str.toLowerCase().contains("is not defiend")) {
+                webView.loadUrl(webView.getUrl());
+                return true;
+            }
+            return super.onConsoleMessage(consoleMessage);
+        }
     }
 
     private class MyWebView extends com.tencent.smtt.sdk.WebViewClient {
