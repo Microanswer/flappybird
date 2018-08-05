@@ -1,7 +1,6 @@
 package cn.microanswer.flappybird.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,11 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
-import java.util.Date;
 
 import cn.microanswer.flappybird.MAssetsManager;
 import cn.microanswer.flappybird.Util;
@@ -51,7 +45,7 @@ import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
  */
 
 public class GameScreen extends BaseScreen implements ContactListener, Btn.OnClickListener {
-    public static final float RUNSPEED = -.41f;
+    public static final float RUNSPEED = -.427f;
     public static final int STAT_NONE = 0; // 游戏完全还没有开始
     public static final int STAT_PLAYING = 1; // 游戏进行中
     public static final int STAT_OVER = 2; // 游戏结束。
@@ -107,7 +101,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         Gdx.input.setInputProcessor(this);
         preferences = Gdx.app.getPreferences("preferences");
 
-        world = new World(new Vector2(0, -3.8f), true);
+        world = new World(new Vector2(0, -3.2f), true);
         world.setContactListener(this);
         pipeStage = new Stage(viewport, batch);
         pipeStage.addActor(new Pipe(0).init(this));
@@ -183,14 +177,14 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
 
         EdgeShape bottomEdge = new EdgeShape();
         bottomEdge.set(0, 0, WIDTH, 0);
-        world.createBody(bodyDef).createFixture(bottomEdge, 999f);
+        world.createBody(bodyDef).createFixture(bottomEdge, 0f);
         bottomEdge.dispose();
     }
 
     @Override
     public void render(float delta) {
         runTime += delta;
-        world.step(1 / 60f/*Gdx.graphics.getDeltaTime()*/, 4, 1);
+        world.step(1 / 60f/*Gdx.graphics.getDeltaTime()*/, 6, 1);
         Batch bh = stage.getBatch();
         // 绘制背景
         bh.begin();

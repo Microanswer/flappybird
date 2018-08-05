@@ -43,7 +43,7 @@ public class Bird extends Actor implements Disposable {
 
     public Bird init(GameScreen flappyBirdLibGDX) {
         this.flappyBirdLibGDX = flappyBirdLibGDX;
-        setSize(0.16666667f, 0.16666667f);
+        setSize(0.16666667f, 0.17f);
         setPosition(0.2333f, (FlappyBirdGame.HEIGHT - getHeight()) / 2f);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
         setRotation(0f);
@@ -140,7 +140,7 @@ public class Bird extends Actor implements Disposable {
     public void up() {
         // 给予小鸟向上的重力，使其达到向上跳跃一下
         body.setLinearVelocity(0, 0);
-        body.applyForceToCenter(0, 1.344f, true);
+        body.applyForceToCenter(0, 1.28f, true);
 
         // 设置帧动画频率更快，让翅膀动得更加急促，显得很用力的在飞
         animation.setFrameDuration(0.055f);

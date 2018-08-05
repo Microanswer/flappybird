@@ -60,10 +60,10 @@ public class Pipe extends Actor {
             shape.setAsBox(width / 2f, height / 2f);
 
             FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.density = 99999f;
+            fixtureDef.density = 0f;
             fixtureDef.shape = shape;
             fixtureDef.restitution = 0;
-            fixtureDef.friction = 99999f;
+            fixtureDef.friction = 0f;
             pipe_down_body = gameScreen.getWorld().createBody(bodyDef);
             pipe_down_body.createFixture(fixtureDef);
             pipe_down_body.setUserData(this);
@@ -103,8 +103,8 @@ public class Pipe extends Actor {
         // (Math.random() * 50) + 150 ==> [0, 50) ==> [150, 200)
         // (Math.random() * (y - x)) + x ==> [0, y-x) ==> [x, y)
 
-        float maxY = FlappyBirdGame.HEIGHT - space;
-        float minY = (112f / 512f) * FlappyBirdGame.HEIGHT + space;
+        float maxY = (FlappyBirdGame.HEIGHT - space) * 0.95f;
+        float minY = ((112f / 512f) * FlappyBirdGame.HEIGHT + space);
         float duY = maxY - minY;
         // float y = FlappyBirdLibGDX.HEIGHT/1.3f +  (float) (Math.random() * duY);
         float y = (float) (minY + (Math.random() * duY + minY));
