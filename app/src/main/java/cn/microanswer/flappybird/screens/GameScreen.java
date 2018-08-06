@@ -101,7 +101,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         Gdx.input.setInputProcessor(this);
         preferences = Gdx.app.getPreferences("preferences");
 
-        world = new World(new Vector2(0, -3.2f), true);
+        world = new World(new Vector2(0, -3.9f), true);
         world.setContactListener(this);
         pipeStage = new Stage(viewport, batch);
         pipeStage.addActor(new Pipe(0).init(this));
