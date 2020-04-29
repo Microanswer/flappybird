@@ -89,7 +89,9 @@ public class Btn extends Actor implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (isTouchDown) {
             if (onClickListener != null) {
-                MAssetsManager.instance().funSound.play();
+                                MAssetsManager.instance().playSound(
+                        MAssetsManager.instance().funSound
+                );
                 onClickListener.onClick(this);
             }
         }

@@ -154,6 +154,17 @@ public class MAssetsManager implements Disposable, AssetErrorListener {
         dieSound1 = assetManager.get("sounds/sfx_hit.ogg");
     }
 
+    public void playSound(final Sound... s) {
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                for (Sound sound : s) {
+                    sound.play();
+                }
+            }
+        });
+    }
+
 
     @Override
     public void dispose() {

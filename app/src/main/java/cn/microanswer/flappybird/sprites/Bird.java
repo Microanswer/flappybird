@@ -157,7 +157,7 @@ public class Bird extends Actor implements Disposable {
         sequence1 = Actions.sequence(rotateByAction, d, rotateByAction4);
         addAction(sequence1);
 
-        MAssetsManager.instance().birdSound.play();
+        MAssetsManager.instance().playSound(MAssetsManager.instance().birdSound);
     }
 
     @Override

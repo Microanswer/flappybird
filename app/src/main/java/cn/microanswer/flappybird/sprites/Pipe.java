@@ -1,5 +1,6 @@
 package cn.microanswer.flappybird.sprites;
 
+import android.util.Log;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;

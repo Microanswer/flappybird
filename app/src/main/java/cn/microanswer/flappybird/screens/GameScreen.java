@@ -184,7 +184,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     @Override
     public void render(float delta) {
         runTime += delta;
-        world.step(1 / 60f/*Gdx.graphics.getDeltaTime()*/, 6, 1);
+        world.step(1/60f, 6, 1);
         Batch bh = stage.getBatch();
         // 绘制背景
         bh.begin();
@@ -376,8 +376,9 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
             if (bird != null && (other instanceof GroundActor || other instanceof Pipe)) {
                 btnClick = false;
                 // 小鸟撞击水管 或 地面
-                MAssetsManager.instance().dieSound1.play();
-                MAssetsManager.instance().dieSound.play();
+                MAssetsManager.instance().playSound(
+                MAssetsManager.instance().dieSound1,
+                MAssetsManager.instance().dieSound);
                 groundActor.setLinearVelocity(0, 0);
                 dieFlashActor.flash();
                 gameStatus = STAT_OVER;

@@ -53,7 +53,7 @@ public class ScoreActor extends Actor implements Disposable {
     // 分数+1
     public void up() {
         this.score++;
-        MAssetsManager.instance().scoreupSound.play();
+        MAssetsManager.instance().playSound(MAssetsManager.instance().scoreupSound);
     }
 
     public int getScore() {

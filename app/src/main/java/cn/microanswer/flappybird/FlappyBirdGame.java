@@ -60,7 +60,9 @@ public class FlappyBirdGame extends Game {
         d.setRunnable(new Runnable() {
             @Override
             public void run() {
-                MAssetsManager.instance().funSound.play();
+                                MAssetsManager.instance().playSound(
+                        MAssetsManager.instance().funSound
+                );
                 setScreen(new MenuScreen(camera, batch).setGame(FlappyBirdGame.this));
             }
         });

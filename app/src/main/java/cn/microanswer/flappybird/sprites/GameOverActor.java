@@ -56,7 +56,9 @@ public class GameOverActor extends Actor {
         action.setRunnable(new Runnable() {
             @Override
             public void run() {
-                MAssetsManager.instance().funSound.play();
+                                MAssetsManager.instance().playSound(
+                        MAssetsManager.instance().funSound
+                );
             }
         });
 
