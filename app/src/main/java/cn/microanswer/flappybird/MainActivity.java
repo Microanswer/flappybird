@@ -36,14 +36,13 @@ public class MainActivity extends AndroidApplication {
         }
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
-        config.useAccelerometer = false;
-        config.useCompass = false;
-        config.useGL30 = true;
+
         FlappyBirdGame flappyBirdGame = new FlappyBirdGame().setMainActivity(this);
 
-        View view = initializeForView(flappyBirdGame, config);
-        setContentView(view);
+        // View view = initializeForView(flappyBirdGame, config);
+        // setContentView(view);
 
+        initialize(flappyBirdGame, config);
     }
 
     private void notSupport(String hint) {
