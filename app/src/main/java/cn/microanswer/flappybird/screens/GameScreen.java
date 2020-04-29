@@ -160,24 +160,24 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
 
         EdgeShape leftEdge = new EdgeShape();
         leftEdge.set(0, HEIGHT, 0, 0);
-        world.createBody(bodyDef).createFixture(leftEdge, 999f);
+        world.createBody(bodyDef).createFixture(leftEdge, Float.MAX_VALUE);
         leftEdge.dispose();
 
         EdgeShape topEdge = new EdgeShape();
         topEdge.set(0, HEIGHT + 0.3f, WIDTH, HEIGHT + 0.3f); // 顶部允许小鸟超出30厘米
         Body topBody = world.createBody(bodyDef);
-        topBody.createFixture(topEdge, 999f);
+        topBody.createFixture(topEdge, Float.MAX_VALUE);
         // topBody.setUserData(groundBody);
         topEdge.dispose();
 
         EdgeShape rightEdge = new EdgeShape();
         rightEdge.set(WIDTH, HEIGHT, WIDTH, 0);
-        world.createBody(bodyDef).createFixture(rightEdge, 999f);
+        world.createBody(bodyDef).createFixture(rightEdge, Float.MAX_VALUE);
         rightEdge.dispose();
 
         EdgeShape bottomEdge = new EdgeShape();
         bottomEdge.set(0, 0, WIDTH, 0);
-        world.createBody(bodyDef).createFixture(bottomEdge, 0f);
+        world.createBody(bodyDef).createFixture(bottomEdge, Float.MAX_VALUE);
         bottomEdge.dispose();
     }
 
