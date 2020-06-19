@@ -1,5 +1,7 @@
 package cn.microanswer.flappybird.screens;
 
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.dialogs.Dialog;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -9,9 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.dialogs.Dialog;
 
 import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
 import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;

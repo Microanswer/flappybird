@@ -1,28 +1,17 @@
 package cn.microanswer.flappybird.screens;
 
-import android.util.Log;
-import android.widget.Toast;
-
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.Util;
+import cn.microanswer.flappybird.sprites.Btn;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 
-import java.util.Date;
 import java.util.Random;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.Util;
-import cn.microanswer.flappybird.dialogs.AlertDialog;
-import cn.microanswer.flappybird.dialogs.LoadingDialog;
-import cn.microanswer.flappybird.sprites.Btn;
 
 import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
 import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
@@ -99,14 +88,6 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
         stage.addActor(btnPlay);
         stage.addActor(btnScore);
         stage.addActor(btnRate);
-
-        // 效验用户信息
-        getGame().getMainActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                getGame().getMainActivity().checkUserInfo();
-            }
-        });
     }
 
     @Override
@@ -158,7 +139,7 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
             game.setScreen(new GameScreen(camera, batch).setGame(game));
         } else if (btnScore == btn) {
             // 跳转成绩排行
-            Util.jump2ScoreActivity(game.getMainActivity(),"http://microanswer.cn/flappybird/scorebord.html");
+            // Util.jump2ScoreActivity(game.getMainActivity(),"http://microanswer.cn/flappybird/scorebord.html");
         } else if (btnRate == btn) {
 
             // AlertDialog alertDialog = new AlertDialog(this, "");

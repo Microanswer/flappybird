@@ -1,14 +1,13 @@
 package cn.microanswer.flappybird.sprites;
 
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.screens.LogoScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.screens.LogoScreen;
 
 /**
  * Created by Micro on 2018-2-19.

@@ -1,5 +1,8 @@
 package cn.microanswer.flappybird.screens;
 
+import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.Util;
+import cn.microanswer.flappybird.sprites.*;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
@@ -7,35 +10,13 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.scenes.scene2d.actions.ParallelAction;
-import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.utils.Array;
-
-import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.Util;
-import cn.microanswer.flappybird.sprites.Bird;
-import cn.microanswer.flappybird.sprites.Btn;
-import cn.microanswer.flappybird.sprites.DieFlashActor;
-import cn.microanswer.flappybird.sprites.GameOverActor;
-import cn.microanswer.flappybird.sprites.GameReadYActor;
-import cn.microanswer.flappybird.sprites.GroundActor;
-import cn.microanswer.flappybird.sprites.Pipe;
-import cn.microanswer.flappybird.sprites.RestartFlashActor;
-import cn.microanswer.flappybird.sprites.ScoreActor;
-import cn.microanswer.flappybird.sprites.ScorePanelActor;
 
 import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
 import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
@@ -352,7 +333,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
             }
         } else if (btn == btnScores) {
             // 跳转到成绩界面
-            Util.jump2ScoreActivity(game.getMainActivity(), "http://microanswer.cn/flappybird/scorebord.html");
+            // Util.jump2ScoreActivity(game.getMainActivity(), "http://microanswer.cn/flappybird/scorebord.html");
         }
     }
 
@@ -395,19 +376,9 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
                 scorePanelActor.show(scoreActor.getScore(), best, isnew);
                 // 显示重新开始按钮
                 MoveToAction moveToAction = Actions.moveTo(btnPlay.getX(), (102f / 512f * HEIGHT), 0);
-                final boolean finalIsnew = isnew;
-                final int finalBest = best;
-                RunnableAction runnableAction = new RunnableAction();
-                runnableAction.setRunnable(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (finalIsnew) {
-                            game.getMainActivity().submitScore(finalBest, playId);
-                        }
-                    }
-                });
-                ParallelAction parallel = Actions.parallel(moveToAction, runnableAction);
-                btnPlay.addAction(Actions.delay(1.75f, parallel));
+
+                // ParallelAction parallel = Actions.parallel(moveToAction);
+                btnPlay.addAction(Actions.delay(1.75f, moveToAction));
                 btnScores.addAction(Actions.sequence(Actions.delay(1.75f), Actions.moveTo(btnScores.getX(), moveToAction.getY())));
             }
         }

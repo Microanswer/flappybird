@@ -1,16 +1,13 @@
 package cn.microanswer.flappybird.screens;
 
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.sprites.LogoActor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.FillViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.sprites.LogoActor;
 
 import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
 import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;

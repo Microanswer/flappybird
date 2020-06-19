@@ -1,11 +1,8 @@
 package cn.microanswer.flappybird.dialogs;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
 import cn.microanswer.flappybird.MAssetsManager;
 import cn.microanswer.flappybird.screens.BaseScreen;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
  * 警告框

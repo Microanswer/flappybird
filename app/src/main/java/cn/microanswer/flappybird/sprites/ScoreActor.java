@@ -1,15 +1,12 @@
 package cn.microanswer.flappybird.sprites;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Disposable;
-
 import cn.microanswer.flappybird.FlappyBirdGame;
 import cn.microanswer.flappybird.MAssetsManager;
 import cn.microanswer.flappybird.NumberDrawHelper;
 import cn.microanswer.flappybird.screens.GameScreen;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Created by Micro on 2018-2-15.

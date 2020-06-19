@@ -1,10 +1,9 @@
 package cn.microanswer.flappybird.dialogs;
 
-import com.badlogic.gdx.graphics.g2d.Batch;
-
 import cn.microanswer.flappybird.FlappyBirdGame;
 import cn.microanswer.flappybird.MAssetsManager;
 import cn.microanswer.flappybird.screens.BaseScreen;
+import com.badlogic.gdx.graphics.g2d.Batch;
 
 /**
  * 游戏内弹出框

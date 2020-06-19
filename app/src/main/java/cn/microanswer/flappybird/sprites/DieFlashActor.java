@@ -1,14 +1,13 @@
 package cn.microanswer.flappybird.sprites;
 
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.screens.GameScreen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.screens.GameScreen;
 
 /**
  * 小鸟死亡瞬间的闪烁屏幕

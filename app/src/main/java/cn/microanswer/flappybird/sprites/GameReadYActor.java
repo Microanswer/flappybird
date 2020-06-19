@@ -1,13 +1,12 @@
 package cn.microanswer.flappybird.sprites;
 
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.screens.GameScreen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Disposable;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.screens.GameScreen;
 
 /**
  * 游戏准备和玩法提示

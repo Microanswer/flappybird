@@ -1,7 +1,8 @@
 package cn.microanswer.flappybird.sprites;
 
-import android.util.Log;
-import com.badlogic.gdx.Game;
+import cn.microanswer.flappybird.FlappyBirdGame;
+import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.screens.GameScreen;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -9,10 +10,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-
-import cn.microanswer.flappybird.FlappyBirdGame;
-import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.screens.GameScreen;
 
 /**
  * Created by Micro on 2018-2-16.

@@ -1,7 +1,9 @@
 package cn.microanswer.flappybird;
 
-import android.content.Context;
-
+import cn.microanswer.flappybird.screens.BaseScreen;
+import cn.microanswer.flappybird.screens.LogoScreen;
+import cn.microanswer.flappybird.screens.MenuScreen;
+import cn.microanswer.flappybird.sprites.RestartFlashActor;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -11,11 +13,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
-
-import cn.microanswer.flappybird.screens.BaseScreen;
-import cn.microanswer.flappybird.screens.LogoScreen;
-import cn.microanswer.flappybird.screens.MenuScreen;
-import cn.microanswer.flappybird.sprites.RestartFlashActor;
 
 /**
  * 像素鸟游戏主类
