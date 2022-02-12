@@ -3,11 +3,11 @@
 
 # 图片预览
 
-<img src="http://file.microanswer.cn/flappybird/**flappybird_1.jpg" width=260 /> <img src="http://file.microanswer.cn/flappybird/**flappybird_2.jpg" width=260 /> <img src="http://file.microanswer.cn/flappybird/**flappybird_3.jpg" width=260 /> <img src="http://file.microanswer.cn/flappybird/**flappybird_4.jpg" width=260 />
+<img src="http://file.microanswer.cn/flappybird/**flappybird_1.jpg" width=320 /> <img src="http://file.microanswer.cn/flappybird/**flappybird_2.jpg" width=320 /> <img src="http://file.microanswer.cn/flappybird/**flappybird_3.jpg" width=320 /> <img src="http://file.microanswer.cn/flappybird/**flappybird_4.jpg" width=320 />
 
 # 动图预览
 
-<img src="http://file.microanswer.cn/flappybird/flappybird_video.gif" width=220 />
+<img src="http://file.microanswer.cn/flappybird/flappybird_video.gif" width=320 />
 
 # website
 
