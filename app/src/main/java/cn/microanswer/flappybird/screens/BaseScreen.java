@@ -25,14 +25,14 @@ public abstract class BaseScreen extends InputAdapter implements Screen {
     protected OrthographicCamera camera;
     protected Viewport viewport;
     protected FlappyBirdGame game;
-    private Stage dialogStage; // 弹出框舞台
+//    private Stage dialogStage; // 弹出框舞台
 
     public BaseScreen(OrthographicCamera camera, Batch batch) {
         this.batch = batch;
         this.camera = camera;
         this.viewport =  new ScalingViewport(Scaling.fill, WIDTH, HEIGHT, camera);
 
-        dialogStage = new Stage(this.viewport, batch);
+//        dialogStage = new Stage(this.viewport, batch);
     }
 
     public BaseScreen setGame(FlappyBirdGame game) {
@@ -45,9 +45,9 @@ public abstract class BaseScreen extends InputAdapter implements Screen {
         viewport.apply(true);
     }
 
-    public FlappyBirdGame getGame() {
-        return game;
-    }
+//    public FlappyBirdGame getGame() {
+//        return game;
+//    }
 
     public Batch getBatch() {
         return batch;
@@ -61,24 +61,24 @@ public abstract class BaseScreen extends InputAdapter implements Screen {
         return viewport;
     }
 
-    public void renderDialogStage (float delay) {
-        dialogStage.act(delay);
-        dialogStage.draw();
-        Color color = dialogStage.getBatch().getColor();
-        color.a = 1;
-        dialogStage.getBatch().setColor(color);
-    }
+//    public void renderDialogStage (float delay) {
+//        dialogStage.act(delay);
+//        dialogStage.draw();
+//        Color color = dialogStage.getBatch().getColor();
+//        color.a = 1;
+//        dialogStage.getBatch().setColor(color);
+//    }
 
-    @Override
-    public void dispose() {
-        dialogStage.dispose();
-    }
+//    @Override
+//    public void dispose() {
+//        dialogStage.dispose();
+//    }
 
-    public void _addDialog(Dialog dialog) {
-        dialogStage.addActor(dialog);
-    }
+//    public void _addDialog(Dialog dialog) {
+//        dialogStage.addActor(dialog);
+//    }
 
-    public void _removeDialog(Dialog dialog) {
-        dialogStage.getRoot().removeActor(dialog);
-    }
+//    public void _removeDialog(Dialog dialog) {
+//        dialogStage.getRoot().removeActor(dialog);
+//    }
 }

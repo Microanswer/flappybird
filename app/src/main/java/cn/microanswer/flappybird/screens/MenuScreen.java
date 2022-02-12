@@ -103,7 +103,7 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
         }
         batch.draw(MAssetsManager.instance().ground, groundX, 0, groundW, groundH);
         batch.draw(MAssetsManager.instance().ground, groundX + groundW, 0, groundW, groundH);
-        groundX += -.4f * delta;
+        groundX += GameScreen.RUNSPEED * delta;
         batch.end();
 
         stage.act(delta);
@@ -111,26 +111,17 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
     }
 
     @Override
-    public void pause() {
-
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-
-    }
+    public void resume() { }
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() { }
 
 
     @Override
-    public void dispose() {
-        stage.dispose();
-
-    }
+    public void dispose() { stage.dispose(); }
 
     @Override
     public void onClick(Btn btn) {
@@ -144,7 +135,6 @@ public class MenuScreen extends BaseScreen implements Btn.OnClickListener {
 
             // AlertDialog alertDialog = new AlertDialog(this, "");
             // alertDialog.show();
-
         }
     }
 

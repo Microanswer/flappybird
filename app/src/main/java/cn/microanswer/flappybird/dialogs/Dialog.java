@@ -161,7 +161,7 @@ public abstract class Dialog extends Group implements InputProcessor {
         RunnableAction runnableAction = Actions.run(new Runnable() {
             @Override
             public void run() {
-                baseScreen._removeDialog(Dialog.this);
+//                baseScreen._removeDialog(Dialog.this);
                 Gdx.input.setInputProcessor(baseScreen);
                 black_03.dispose();
             }
@@ -181,7 +181,7 @@ public abstract class Dialog extends Group implements InputProcessor {
         SequenceAction sequence = Actions.sequence(scaleToAction, scaleToAction1);
         addAction(Actions.parallel(alpha, sequence));
 
-        baseScreen._addDialog(this);
+//        baseScreen._addDialog(this);
     }
 
 

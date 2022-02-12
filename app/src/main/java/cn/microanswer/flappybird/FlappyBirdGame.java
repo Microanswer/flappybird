@@ -20,17 +20,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
  */
 
 public class FlappyBirdGame extends Game {
-    private MainActivity mainActivity;
-
-    public FlappyBirdGame setMainActivity(MainActivity mainActivity) {
-        this.mainActivity = mainActivity;
-        return this;
-    }
-
-    public MainActivity getMainActivity() {
-        return mainActivity;
-    }
-
     private static final float WIDTH$HEIGHT = .5625f;
     public static final float WIDTH = 1f;
     public static final float HEIGHT = WIDTH / WIDTH$HEIGHT;
@@ -46,24 +35,24 @@ public class FlappyBirdGame extends Game {
         MAssetsManager.instance().init();
         batch = new SpriteBatch();
         camera = new OrthographicCamera(WIDTH, HEIGHT);
+        camera.zoom = 1f;
         setScreen(new LogoScreen(camera, batch).setGame(this));
     }
 
     // 资源加载完成时调用
     private void loadOk() {
         MAssetsManager.instance().d0WhenLoaded();
-        screenChangeActor = new RestartFlashActor().init(null);
+        screenChangeActor = new RestartFlashActor().init();
         RunnableAction d = new RunnableAction();
         d.setRunnable(new Runnable() {
             @Override
             public void run() {
-                                MAssetsManager.instance().playSound(
-                        MAssetsManager.instance().funSound
-                );
+                MAssetsManager.instance().playSound(MAssetsManager.instance().funSound);
                 setScreen(new MenuScreen(camera, batch).setGame(FlappyBirdGame.this));
             }
         });
-        screenChangeActor.addAction(Actions.delay(1f, d));
+        screenChangeActor.canDraw=true;
+        screenChangeActor.addAction(Actions.delay(0.3f, d));
     }
 
     @Override
@@ -73,10 +62,8 @@ public class FlappyBirdGame extends Game {
 
         super.render();
 
-        boolean isLoaded = MAssetsManager.instance().getAssetManager().update();
-
         if (!isAssetsLoaded) {
-            Screen screen = getScreen();
+            boolean isLoaded = MAssetsManager.instance().getAssetManager().update();
             if (screen != null && screen instanceof LogoScreen) {
                 float loadProgress = MAssetsManager.instance().getAssetManager().getProgress();
                 LogoScreen screen1 = (LogoScreen) screen;
@@ -87,7 +74,7 @@ public class FlappyBirdGame extends Game {
                 loadOk();
             }
         }
-        if (screenChangeActor != null) {
+        if (screenChangeActor != null && screenChangeActor.canDraw) {
             screenChangeActor.act(Gdx.graphics.getDeltaTime());
             batch.begin();
             screenChangeActor.draw(batch, 1f);
@@ -95,10 +82,10 @@ public class FlappyBirdGame extends Game {
         }
 
         // 绘制弹出框舞台
-        if (screen != null && screen instanceof BaseScreen) {
-            BaseScreen baseScreen = (BaseScreen) screen;
-            baseScreen.renderDialogStage(Gdx.graphics.getDeltaTime());
-        }
+//        if (screen != null && screen instanceof BaseScreen) {
+//            BaseScreen baseScreen = (BaseScreen) screen;
+//            baseScreen.renderDialogStage(Gdx.graphics.getDeltaTime());
+//        }
     }
 
     @Override

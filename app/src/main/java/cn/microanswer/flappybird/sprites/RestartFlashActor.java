@@ -16,10 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
  */
 
 public class RestartFlashActor extends Actor {
-    private Screen flappyBirdLibGDX;
 
-    public RestartFlashActor init(Screen flappyBirdLibGDX) {
-        this.flappyBirdLibGDX = flappyBirdLibGDX;
+    public boolean canDraw  =false;
+
+    public RestartFlashActor init() {
 
         setWidth(FlappyBirdGame.WIDTH);
         setHeight(FlappyBirdGame.HEIGHT);
@@ -33,6 +33,10 @@ public class RestartFlashActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
+        if (!canDraw) {
+            return;
+        }
+
         super.draw(batch, parentAlpha);
 
         Color color = batch.getColor();
@@ -43,11 +47,18 @@ public class RestartFlashActor extends Actor {
     }
 
     public void d0Restart (Runnable runnable) {
-
+        canDraw = true;
         AlphaAction alpha = Actions.alpha(1, 0.3f);
         RunnableAction runnableAction = new RunnableAction();
         runnableAction.setRunnable(runnable);
         AlphaAction alpha1 = Actions.alpha(0, 0.3f);
+        RunnableAction runEndAction = new RunnableAction();
+        runEndAction.setRunnable(new Runnable() {
+            @Override
+            public void run() {
+                canDraw = false;
+            }
+        });
         SequenceAction sequence = Actions.sequence(alpha, runnableAction, alpha1);
         addAction(sequence);
 

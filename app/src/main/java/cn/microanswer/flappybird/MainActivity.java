@@ -29,7 +29,7 @@ public class MainActivity extends AndroidApplication {
 
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 
-        FlappyBirdGame flappyBirdGame = new FlappyBirdGame().setMainActivity(this);
+        FlappyBirdGame flappyBirdGame = new FlappyBirdGame();
 
         // View view = initializeForView(flappyBirdGame, config);
         // setContentView(view);

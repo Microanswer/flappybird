@@ -1,8 +1,11 @@
 package cn.microanswer.flappybird.screens;
 
-import cn.microanswer.flappybird.MAssetsManager;
-import cn.microanswer.flappybird.Util;
-import cn.microanswer.flappybird.sprites.*;
+import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
+import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
+
+import android.graphics.drawable.shapes.RectShape;
+import android.util.Log;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
@@ -10,7 +13,16 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
@@ -18,15 +30,28 @@ import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Array;
 
-import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
-import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.microanswer.flappybird.MAssetsManager;
+import cn.microanswer.flappybird.Util;
+import cn.microanswer.flappybird.sprites.Bird;
+import cn.microanswer.flappybird.sprites.Btn;
+import cn.microanswer.flappybird.sprites.DieFlashActor;
+import cn.microanswer.flappybird.sprites.GameOverActor;
+import cn.microanswer.flappybird.sprites.GameReadYActor;
+import cn.microanswer.flappybird.sprites.GroundActor;
+import cn.microanswer.flappybird.sprites.Pipe;
+import cn.microanswer.flappybird.sprites.RestartFlashActor;
+import cn.microanswer.flappybird.sprites.ScoreActor;
+import cn.microanswer.flappybird.sprites.ScorePanelActor;
 
 /**
  * Created by Micro on 2018-2-19.
  */
 
 public class GameScreen extends BaseScreen implements ContactListener, Btn.OnClickListener {
-    public static final float RUNSPEED = -.427f;
+    public static final float RUNSPEED = -.45f;
     public static final int STAT_NONE = 0; // 游戏完全还没有开始
     public static final int STAT_PLAYING = 1; // 游戏进行中
     public static final int STAT_OVER = 2; // 游戏结束。
@@ -46,6 +71,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     private Btn btnPlay, btnScores;
     private TextureAtlas.AtlasRegion bg;
     private String playId; // 每开始一局游戏，生成一个新的playId
+    private int SecondWorldCount = 4; // 每秒钟物理世界计算次数
 
     //    private BitmapFont bitmapFont;
 
@@ -75,15 +101,12 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
 
     public GameScreen(OrthographicCamera camera, Batch batch) {
         super(camera, batch);
-    }
-
-    @Override
-    public void show() {
         Gdx.input.setInputProcessor(this);
         preferences = Gdx.app.getPreferences("preferences");
 
-        world = new World(new Vector2(0, -3.9f), true);
+        world = new World(new Vector2(0f, -5.25f), true);
         world.setContactListener(this);
+
         pipeStage = new Stage(viewport, batch);
         pipeStage.addActor(new Pipe(0).init(this));
         pipeStage.addActor(new Pipe(1).init(this));
@@ -115,17 +138,18 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         btnScores.setY(-btnScores.getHeight());
         btnScores.setOnClickListener(this);
         groundActor = new GroundActor().init(this);
-        restartFlashActor = new RestartFlashActor().init(this);
-        stage.addActor(bird);
-        stage.addActor(gameReadYActor);
-        stage.addActor(gameOverActor);
-        stage.addActor(scoreActor);
-        stage.addActor(groundActor);
-        stage.addActor(scorePanelActor);
-        stage.addActor(btnPlay);
-        stage.addActor(btnScores);
-        stage.addActor(dieFlashActor);
-        stage.addActor(restartFlashActor);
+        restartFlashActor = new RestartFlashActor().init();
+
+        stage.addActor(bird);                   // 鸟
+        stage.addActor(gameReadYActor);         // Ready 文案
+        stage.addActor(gameOverActor);          // 结束游戏文案
+        stage.addActor(scoreActor);             // 成绩
+        stage.addActor(groundActor);            // 地面
+        stage.addActor(scorePanelActor);        // 成绩面板
+        stage.addActor(btnPlay);                // 重新开始游戏按钮
+        stage.addActor(btnScores);              // 成绩按钮
+        stage.addActor(dieFlashActor);          // 死亡闪屏
+        stage.addActor(restartFlashActor);      // 重新开始游戏闪屏
         // renderer = new Box2DDebugRenderer();
         // bitmapFont = new BitmapFont(Gdx.files.internal("arial-15.fnt"));
         // bitmapFont.setColor(Color.BLACK);
@@ -133,39 +157,33 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         buildWorldWall(); // 给游戏四周添加限制
     }
 
-    // 构建屏幕四周的墙壁，以免小鸟飞出屏幕
+
+
+    @Override
+    public void show() {
+
+    }
+
+    // 构建屏幕顶部的墙壁，以免小鸟飞出屏幕
     private void buildWorldWall() {
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
-        EdgeShape leftEdge = new EdgeShape();
-        leftEdge.set(0, HEIGHT, 0, 0);
-        world.createBody(bodyDef).createFixture(leftEdge, Float.MAX_VALUE);
-        leftEdge.dispose();
-
         EdgeShape topEdge = new EdgeShape();
         topEdge.set(0, HEIGHT + 0.3f, WIDTH, HEIGHT + 0.3f); // 顶部允许小鸟超出30厘米
         Body topBody = world.createBody(bodyDef);
         topBody.createFixture(topEdge, Float.MAX_VALUE);
-        // topBody.setUserData(groundBody);
         topEdge.dispose();
-
-        EdgeShape rightEdge = new EdgeShape();
-        rightEdge.set(WIDTH, HEIGHT, WIDTH, 0);
-        world.createBody(bodyDef).createFixture(rightEdge, Float.MAX_VALUE);
-        rightEdge.dispose();
-
-        EdgeShape bottomEdge = new EdgeShape();
-        bottomEdge.set(0, 0, WIDTH, 0);
-        world.createBody(bodyDef).createFixture(bottomEdge, Float.MAX_VALUE);
-        bottomEdge.dispose();
     }
 
     @Override
     public void render(float delta) {
         runTime += delta;
-        world.step(1/60f, 6, 1);
+        double dt = Math.round(delta/0.0083333333333333);
+        for (int i = 0; i < dt; i++) {
+            world.step(0.008333333333333f, 6, 2);
+        }
         Batch bh = stage.getBatch();
         // 绘制背景
         bh.begin();
@@ -181,17 +199,13 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
 
 
     @Override
-    public void pause() {
-    }
+    public void pause() { }
 
     @Override
-    public void resume() {
-    }
+    public void resume() { }
 
     @Override
-    public void hide() {
-
-    }
+    public void hide() { }
 
     @Override
     public void dispose() {
@@ -357,9 +371,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
             if (bird != null && (other instanceof GroundActor || other instanceof Pipe)) {
                 btnClick = false;
                 // 小鸟撞击水管 或 地面
-                MAssetsManager.instance().playSound(
-                MAssetsManager.instance().dieSound1,
-                MAssetsManager.instance().dieSound);
+                MAssetsManager.instance().playSound(MAssetsManager.instance().dieSound1, MAssetsManager.instance().dieSound);
                 groundActor.setLinearVelocity(0, 0);
                 dieFlashActor.flash();
                 gameStatus = STAT_OVER;
@@ -385,17 +397,11 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     }
 
     @Override
-    public void endContact(Contact contact) {
-
-    }
+    public void endContact(Contact contact) { }
 
     @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
+    public void preSolve(Contact contact, Manifold oldManifold) { }
 
     @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
+    public void postSolve(Contact contact, ContactImpulse impulse) { }
 }
