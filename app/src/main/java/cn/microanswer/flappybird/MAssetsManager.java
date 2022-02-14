@@ -8,12 +8,15 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 /**
  * 游戏中的纹理资源管理类
  * Created by Micro on 2018-2-10.
  */
 
-public class MAssetsManager implements Disposable, AssetErrorListener {
+public class MAssetsManager extends Thread implements Disposable, AssetErrorListener {
     private static final String TAG = "MAssetsManager";
 
     private static MAssetsManager mAssetsManager;
@@ -47,6 +50,7 @@ public class MAssetsManager implements Disposable, AssetErrorListener {
     public static MAssetsManager instance() {
         if (mAssetsManager == null) {
             mAssetsManager = new MAssetsManager();
+            mAssetsManager.start();
         }
         return mAssetsManager;
     }
@@ -153,17 +157,25 @@ public class MAssetsManager implements Disposable, AssetErrorListener {
         dieSound1 = assetManager.get("sounds/sfx_hit.ogg");
     }
 
-    public void playSound(final Sound... s) {
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                for (Sound sound : s) {
-                    sound.play();
-                }
-            }
-        });
+    public synchronized void playSound(final Sound... s) {
+        needPlaySounds.addAll(Arrays.asList(s));
+        this.notify();
     }
 
+    ArrayList<Sound> needPlaySounds = new ArrayList<>();
+    @Override
+    public void run() {
+        super.run();
+        synchronized (this) {
+            while(true) {
+                while(needPlaySounds.size() <= 0) {
+                    try { this.wait(); } catch (InterruptedException e) { e.printStackTrace(); }
+                }
+                Sound s = needPlaySounds.remove(0);
+                s.play();
+            }
+        }
+    }
 
     @Override
     public void dispose() {
