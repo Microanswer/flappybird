@@ -49,7 +49,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     public static final int STAT_NONE = 0; // 游戏完全还没有开始
     public static final int STAT_PLAYING = 1; // 游戏进行中
     public static final int STAT_OVER = 2; // 游戏结束。
-    public static final float gravty = 5.2f * WIDTH;
+    public static final float gravty = 6.5f * WIDTH;
 
     private World world;
     private Preferences preferences;
@@ -181,9 +181,9 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     @Override
     public void render(float delta) {
         runTime += delta;
-        double dt = Math.round(delta/0.0083333333333333);
+        double dt = delta/1/144f;
         for (int i = 0; i < dt; i++) {
-            world.step(0.008333333333333f, 6, 2);
+            world.step(1/144f, 6, 2);
         }
         Batch bh = stage.getBatch();
         // 绘制背景

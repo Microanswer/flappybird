@@ -131,7 +131,7 @@ public class Bird extends Actor implements Disposable {
     public void up() {
         // 给予小鸟向上的重力，使其达到向上跳跃一下
         body.setLinearVelocity(0, 0);
-        body.applyLinearImpulse(0, 17f * GameScreen.gravty/**/, getWidth()/2f, getHeight()/2f, true);
+        body.applyLinearImpulse(0, 14f * GameScreen.gravty/**/, getWidth()/2f, getHeight()/2f, true);
 //        body.applyForceToCenter(0, 2.95f * FlappyBirdGame.WIDTH * 999, true);
 
         // 设置帧动画频率更快，让翅膀动得更加急促，显得很用力的在飞
