@@ -21,7 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 
 public class FlappyBirdGame extends Game {
     private static final float WIDTH$HEIGHT = .5625f;
-    public static final float WIDTH = 1f;
+    public static final float WIDTH = 50f;
     public static final float HEIGHT = WIDTH / WIDTH$HEIGHT;
     private SpriteBatch batch;
     private OrthographicCamera camera;
@@ -33,6 +33,7 @@ public class FlappyBirdGame extends Game {
         Gdx.app.setLogLevel(Application.LOG_NONE);
         isAssetsLoaded = false;
         MAssetsManager.instance().init();
+        Gdx.graphics.setContinuousRendering(true);
         batch = new SpriteBatch();
         camera = new OrthographicCamera(WIDTH, HEIGHT);
         camera.zoom = 1f;

@@ -20,13 +20,13 @@ public class GroundActor extends Actor {
     public GroundActor init(GameScreen flappyBirdLibGDX) {
         this.flappyBirdLibGDX = flappyBirdLibGDX;
 
-        groundWIDTH = FlappyBirdGame.WIDTH * 2;
+        groundWIDTH = FlappyBirdGame.WIDTH;
         groundHEIGHT = FlappyBirdGame.HEIGHT * .21875f;
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.linearVelocity.x = GameScreen.RUNSPEED;
-        bodyDef.position.x = 0;
+        bodyDef.position.x = groundWIDTH;
         bodyDef.position.y = groundHEIGHT / 2f;
         groundBody = flappyBirdLibGDX.getWorld().createBody(bodyDef);
         groundBody.setUserData(this);
@@ -37,7 +37,7 @@ public class GroundActor extends Actor {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 99999f;
-        fixtureDef.restitution = 0f;
+        fixtureDef.friction = 999999f;
         groundBody.createFixture(fixtureDef);
         return this;
     }
@@ -48,10 +48,10 @@ public class GroundActor extends Actor {
         // 绘制地板
         Transform transform = groundBody.getTransform();
         Vector2 p = transform.getPosition();
-        bh.draw(MAssetsManager.instance().ground, p.x, p.y - (groundHEIGHT / 2f), groundWIDTH / 2f, groundHEIGHT);
-        bh.draw(MAssetsManager.instance().ground, p.x + groundWIDTH / 2f, p.y - (groundHEIGHT / 2f), (groundWIDTH / 2f), groundHEIGHT);
-        if (p.x <= -groundWIDTH / 2f) {
-            p.x = -1 / 288f;
+        bh.draw(MAssetsManager.instance().ground, p.x - groundWIDTH, p.y - (groundHEIGHT / 2f),groundWIDTH, groundHEIGHT);
+        bh.draw(MAssetsManager.instance().ground, p.x, p.y - (groundHEIGHT / 2f), groundWIDTH, groundHEIGHT);
+        if (p.x <= 0f) {
+            p.x = groundWIDTH;
             groundBody.setTransform(p, 0f);
         }
     }

@@ -5,6 +5,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetErrorListener;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -22,6 +23,7 @@ public class MAssetsManager extends Thread implements Disposable, AssetErrorList
     private static MAssetsManager mAssetsManager;
     private AssetManager assetManager;
     private TextureAtlas textureAtlas;
+    private boolean disposed;
 
     public TextureAtlas.AtlasRegion[][] bird = new TextureAtlas.AtlasRegion[3][3];
     public TextureAtlas.AtlasRegion bg_day, bg_night;
@@ -39,8 +41,10 @@ public class MAssetsManager extends Thread implements Disposable, AssetErrorList
     public Sound birdSound;
     public Sound scoreupSound;
     public Sound dieSound, dieSound1;
+    public BitmapFont font1,font2;
 
     private MAssetsManager() {
+        this.disposed = false;
     }
 
     public AssetManager getAssetManager() {
@@ -65,6 +69,8 @@ public class MAssetsManager extends Thread implements Disposable, AssetErrorList
         assetManager.load("sounds/sfx_point.ogg", Sound.class);
         assetManager.load("sounds/sfx_die.ogg", Sound.class);
         assetManager.load("sounds/sfx_hit.ogg", Sound.class);
+        assetManager.load("fonts/fnt.fnt", BitmapFont.class);
+        assetManager.load("fonts/fnt1.fnt", BitmapFont.class);
         return instance();
     }
 
@@ -155,6 +161,9 @@ public class MAssetsManager extends Thread implements Disposable, AssetErrorList
         dieSound = assetManager.get("sounds/sfx_die.ogg");
         // 小鸟死亡声音2
         dieSound1 = assetManager.get("sounds/sfx_hit.ogg");
+
+        font1 = assetManager.get("fonts/fnt.fnt");
+        font2 = assetManager.get("fonts/fnt1.fnt");
     }
 
     public synchronized void playSound(final Sound... s) {
@@ -167,7 +176,7 @@ public class MAssetsManager extends Thread implements Disposable, AssetErrorList
     public void run() {
         super.run();
         synchronized (this) {
-            while(true) {
+            while(!disposed) {
                 while(needPlaySounds.size() <= 0) {
                     try { this.wait(); } catch (InterruptedException e) { e.printStackTrace(); }
                 }
@@ -180,6 +189,7 @@ public class MAssetsManager extends Thread implements Disposable, AssetErrorList
     @Override
     public void dispose() {
         assetManager.dispose();
+        this.disposed = true;
     }
 
     @Override

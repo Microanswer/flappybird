@@ -37,7 +37,7 @@ public class Pipe extends Actor {
         float width = FlappyBirdGame.WIDTH * (52 / 288f);
         float height = FlappyBirdGame.HEIGHT * (320f / 512f);
         pipeSize = new Vector2(width, height);
-        space = 0.16666667f * 2f;
+        space = 0.16666667f * 2f * FlappyBirdGame.WIDTH;
         passed=false;
 
         setWidth(width);
@@ -60,7 +60,7 @@ public class Pipe extends Actor {
             FixtureDef fixtureDef = new FixtureDef();
             fixtureDef.density = 0f;
             fixtureDef.shape = shape;
-            fixtureDef.restitution = 0;
+            fixtureDef.restitution = 0f;
             fixtureDef.friction = 0f;
             pipe_down_body = gameScreen.getWorld().createBody(bodyDef);
             pipe_down_body.createFixture(fixtureDef);
@@ -119,7 +119,7 @@ public class Pipe extends Actor {
             Pipe actor = (Pipe) getStage().getActors().get(i);
             return new Vector2(actor.pipeDownPosition.x + pipeSize.x + ((((288f - 95f) / 2f) / 288f) * FlappyBirdGame.WIDTH), y);
         } else/* (this.flappyBirdGame.getGameStatus() == FlappyBirdLibGDX.STAT_NONE)*/ {
-            return new Vector2(1.6f + (index * (pipeSize.x + ((((288f - 95) / 2f) / 288f) * FlappyBirdGame.WIDTH))), y);
+            return new Vector2(1.6f * FlappyBirdGame.WIDTH + (index * (pipeSize.x + ((((288f - 95) / 2f) / 288f) * FlappyBirdGame.WIDTH))), y);
         }
     }
 

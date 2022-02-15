@@ -3,9 +3,6 @@ package cn.microanswer.flappybird.screens;
 import static cn.microanswer.flappybird.FlappyBirdGame.HEIGHT;
 import static cn.microanswer.flappybird.FlappyBirdGame.WIDTH;
 
-import android.graphics.drawable.shapes.RectShape;
-import android.util.Log;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Color;
@@ -15,13 +12,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,9 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.AlphaAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Array;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.microanswer.flappybird.FlappyBirdGame;
 import cn.microanswer.flappybird.MAssetsManager;
 import cn.microanswer.flappybird.Util;
 import cn.microanswer.flappybird.sprites.Bird;
@@ -51,10 +45,11 @@ import cn.microanswer.flappybird.sprites.ScorePanelActor;
  */
 
 public class GameScreen extends BaseScreen implements ContactListener, Btn.OnClickListener {
-    public static final float RUNSPEED = -.45f;
+    public static final float RUNSPEED = -.45f * WIDTH;
     public static final int STAT_NONE = 0; // 游戏完全还没有开始
     public static final int STAT_PLAYING = 1; // 游戏进行中
     public static final int STAT_OVER = 2; // 游戏结束。
+    public static final float gravty = 5.2f * WIDTH;
 
     private World world;
     private Preferences preferences;
@@ -72,6 +67,8 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     private TextureAtlas.AtlasRegion bg;
     private String playId; // 每开始一局游戏，生成一个新的playId
     private int SecondWorldCount = 4; // 每秒钟物理世界计算次数
+
+//    Box2DDebugRenderer b2dr;
 
     //    private BitmapFont bitmapFont;
 
@@ -104,7 +101,8 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         Gdx.input.setInputProcessor(this);
         preferences = Gdx.app.getPreferences("preferences");
 
-        world = new World(new Vector2(0f, -5.25f), true);
+        world = new World(new Vector2(0f, -gravty), true);
+//        b2dr = new Box2DDebugRenderer();
         world.setContactListener(this);
 
         pipeStage = new Stage(viewport, batch);
@@ -160,9 +158,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
 
 
     @Override
-    public void show() {
-
-    }
+    public void show() { }
 
     // 构建屏幕顶部的墙壁，以免小鸟飞出屏幕
     private void buildWorldWall() {
@@ -170,8 +166,13 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
 
+        EdgeShape leftEdge = new EdgeShape();
+        leftEdge.set(0, HEIGHT, 0, 0);
+        world.createBody(bodyDef).createFixture(leftEdge, Float.MAX_VALUE);
+        leftEdge.dispose();
+
         EdgeShape topEdge = new EdgeShape();
-        topEdge.set(0, HEIGHT + 0.3f, WIDTH, HEIGHT + 0.3f); // 顶部允许小鸟超出30厘米
+        topEdge.set(0, HEIGHT + 0.3f * WIDTH, WIDTH, HEIGHT + 0.3f * WIDTH); // 顶部允许小鸟超出30厘米
         Body topBody = world.createBody(bodyDef);
         topBody.createFixture(topEdge, Float.MAX_VALUE);
         topEdge.dispose();
@@ -195,6 +196,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
         }
         stage.act();
         stage.draw();
+//        b2dr.render(world, camera.combined);
     }
 
 

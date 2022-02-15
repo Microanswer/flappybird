@@ -30,8 +30,8 @@ public class Bird extends Actor implements Disposable {
 
     public Bird init(GameScreen flappyBirdLibGDX) {
         this.flappyBirdLibGDX = flappyBirdLibGDX;
-        setSize(0.16666667f, 0.17f);
-        setPosition(0.2333f, (FlappyBirdGame.HEIGHT - getHeight()) / 2f);
+        setSize(0.16666667f * FlappyBirdGame.WIDTH, 0.17f * FlappyBirdGame.WIDTH);
+        setPosition(0.2333f * FlappyBirdGame.WIDTH, (FlappyBirdGame.HEIGHT - getHeight()) / 2f);
         setOrigin(getWidth() / 2f, getHeight() / 2f);
         setRotation(0f);
 
@@ -59,10 +59,10 @@ public class Bird extends Actor implements Disposable {
 
             PolygonShape polygonShape = new PolygonShape();
             polygonShape.setAsBox(getWidth() / 2f, getHeight() / 2f);
-            polygonShape.setRadius(-0.053f);
+            polygonShape.setRadius(-0.23f * getWidth()); // <==
 
             FixtureDef fixtureDef = new FixtureDef();
-            fixtureDef.density = .7f;
+            fixtureDef.density = 1f;
             fixtureDef.friction = 0f;
             fixtureDef.restitution = 0f;
             fixtureDef.shape = polygonShape;
@@ -123,11 +123,16 @@ public class Bird extends Actor implements Disposable {
         removeAction(forever);
     }
 
+    public void setLinearVelocity(float vx,float vy) {
+        body.setLinearVelocity(vx,vy);
+    }
+
     // 向上跳跃。
     public void up() {
         // 给予小鸟向上的重力，使其达到向上跳跃一下
         body.setLinearVelocity(0, 0);
-        body.applyForceToCenter(0, 2.95f, true);
+        body.applyLinearImpulse(0, 17f * GameScreen.gravty/**/, getWidth()/2f, getHeight()/2f, true);
+//        body.applyForceToCenter(0, 2.95f * FlappyBirdGame.WIDTH * 999, true);
 
         // 设置帧动画频率更快，让翅膀动得更加急促，显得很用力的在飞
         animation.setFrameDuration(0.055f);
@@ -149,5 +154,6 @@ public class Bird extends Actor implements Disposable {
 
     @Override
     public void dispose() {
+
     }
 }
