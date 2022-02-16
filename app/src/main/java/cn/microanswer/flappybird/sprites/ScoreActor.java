@@ -44,7 +44,7 @@ public class ScoreActor extends Label implements Disposable {
 //        setHeight(numberDrawHelper.getNumberHeight()); // 绘制成绩的高度就使用单个数字的高度
 
 //        setX(FlappyBirdGame.WIDTH / 2f);
-        setY(FlappyBirdGame.HEIGHT/1.65f);
+        setY(FlappyBirdGame.HEIGHT/1.7f);
 //        numberDrawHelper.setPosition(getX(), getY());
 //        numberDrawHelper.setLetterSpace(1.8f / 144f);
 
@@ -77,5 +77,6 @@ public class ScoreActor extends Label implements Disposable {
 
     public void reset() {
         this.score = 0;
+        setText(String.valueOf(this.score));
     }
 }

@@ -49,7 +49,7 @@ public class GameScreen extends BaseScreen implements ContactListener, Btn.OnCli
     public static final int STAT_NONE = 0; // 游戏完全还没有开始
     public static final int STAT_PLAYING = 1; // 游戏进行中
     public static final int STAT_OVER = 2; // 游戏结束。
-    public static final float gravty = 6.5f * WIDTH;
+    public static final float gravty = 5.4f * WIDTH;
 
     private World world;
     private Preferences preferences;
